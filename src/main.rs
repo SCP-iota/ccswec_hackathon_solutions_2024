@@ -3,6 +3,7 @@ use clap::{builder::Str, Parser, Subcommand};
 
 mod cmd01_palindrome_index;
 mod cmd02_sparse_arrays;
+mod cmd03_climbing_the_leaderboard;
 
 #[derive(Parser)]
 #[command(version, about)]
@@ -14,7 +15,8 @@ struct Cli {
 #[derive(Subcommand)]
 enum Commands {
     PalindromeIndex,
-    SparseArrays
+    SparseArrays,
+    ClimbingTheLeaderboard
 }
 
 #[derive(Debug)]
@@ -69,6 +71,21 @@ fn read_lines_group() -> Result<Vec<String>, HackathonError> {
     Ok(lines)
 }
 
+fn read_lines_group_int() -> Result<Vec<i32>, HackathonError> {
+    let mut nlines_str = String::new();
+    stdin().read_line(&mut nlines_str)?;
+    let nlines = nlines_str.trim().parse::<usize>()?;
+    let mut lines = vec!();
+
+    for _ in 0..nlines {
+        let mut line = String::new();
+        stdin().read_line(&mut line)?;
+        lines.push(line.trim().parse::<i32>()?);
+    }
+
+    Ok(lines)
+}
+
 fn main() -> Result<(), HackathonError> {
     let cmd = Cli::parse();
 
@@ -87,6 +104,16 @@ fn main() -> Result<(), HackathonError> {
             let queries = read_lines_group()?;
 
             for n in cmd02_sparse_arrays::matchingStrings(&strings, &queries) {
+                println!("{}", n);
+            }
+
+            Ok(())
+        },
+        Commands::ClimbingTheLeaderboard => {
+            let scores = read_lines_group_int()?;
+            let alice_scores = read_lines_group_int()?;
+
+            for n in cmd03_climbing_the_leaderboard::climbingLeaderboard(&scores, &alice_scores) {
                 println!("{}", n);
             }
 
