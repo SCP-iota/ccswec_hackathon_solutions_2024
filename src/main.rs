@@ -4,6 +4,7 @@ use clap::{builder::Str, Parser, Subcommand};
 mod cmd01_palindrome_index;
 mod cmd02_sparse_arrays;
 mod cmd03_climbing_the_leaderboard;
+mod cmd04_sorted_subsegments;
 
 #[derive(Parser)]
 #[command(version, about)]
@@ -16,7 +17,8 @@ struct Cli {
 enum Commands {
     PalindromeIndex,
     SparseArrays,
-    ClimbingTheLeaderboard
+    ClimbingTheLeaderboard,
+    SortedSubsegments
 }
 
 #[derive(Debug)]
@@ -117,6 +119,27 @@ fn main() -> Result<(), HackathonError> {
                 println!("{}", n);
             }
 
+            Ok(())
+        },
+        Commands::SortedSubsegments => {
+            let mut first_line = String::new();
+            stdin().read_line(&mut first_line)?;
+            let first_ints = first_line.trim().split(" ").map(|x| x.parse::<i32>().unwrap()).collect::<Vec<i32>>();
+            let q = first_ints[1] as usize;
+            let k = first_ints[2];
+            let mut list_line = String::new();
+            stdin().read_line(&mut list_line)?;
+            let list = list_line.trim().split(" ").map(|x| x.parse::<i32>().unwrap()).collect::<Vec<i32>>();
+            let mut queries = vec!();
+
+            for _ in 0..q {
+                let mut query_line = String::new();
+                stdin().read_line(&mut query_line)?;
+                let mut query = query_line.trim().split(" ").map(|x| x.parse::<i32>().unwrap()).collect::<Vec<i32>>();
+                queries.push(query);
+            }
+
+            println!("{}", cmd04_sorted_subsegments::sortedSubsegments(k, &first_ints, &queries));
             Ok(())
         }
     }
